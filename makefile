@@ -7,7 +7,7 @@ OPTIMIZE = yes
 DEBUG    = no
 PROFILE  = no
 PAPI     = no
-VEC_INFO = no
+VEC_INFO = yes
 
 #===============================================================================
 # Program name & source code list
