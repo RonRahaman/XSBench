@@ -91,6 +91,32 @@ void calculate_macro_xs( double p_energy, int mat, int n_isotopes,
 	idx = grid_search( n_isotopes * n_gridpoints, p_energy,
 	                   energy_grid);	
 	
+	
+	/*
+	Vectorization thoughts:
+
+	We can vectorize the lookup of macroscopic XS's, giving each
+	sse register a different nuclide to access on the greater grid.
+
+	-OR-
+
+	We can vectorize the lookup of interaction types within the
+	micro XS lookup function. This alone would provide a 5x savings.
+	What would be saved? Interpolation cost. (i.e., a 5x reduction
+	in flops). Would this matter? Maybe not - since the calc time is
+	probably dominated by nops while waiting for memory loads to
+	hit the registers. 
+	
+	-THEREFORE-
+
+	I would do the micro XS's first, right? Or maybe the macro XS
+	stuff would be better? Macro stuff has to be accumulated though,
+	which is minorly problematic. Maybe that doesn't matter. I don't
+	know. Why not vectorize both? But where to start?
+	
+	*/
+	
+	
 	// Once we find the pointer array on the UEG, we can pull the data
 	// from the respective nuclide grids, as well as the nuclide
 	// concentration data for the material
