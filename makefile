@@ -7,7 +7,7 @@ OPTIMIZE = yes
 DEBUG    = no
 PROFILE  = no
 PAPI     = no
-VEC_INFO = no
+VEC_INFO = yes
 
 #===============================================================================
 # Program name & source code list
@@ -17,12 +17,12 @@ program = XSBench
 
 source = \
 Main.c \
-CalculateXS.c \
 GridInit.c \
 XSutils.c \
 Materials.c
 
 obj = $(source:.c=.o)
+
 #===============================================================================
 # Sets Flags
 #===============================================================================
@@ -73,20 +73,23 @@ endif
 # Targets to Build
 #===============================================================================
 
-$(program): $(obj) do_flops.o XSbench_header.h
-	$(GCC) $(GCC_S_FLAGS) $(GCC_O_FLAGS) do_flops.o $(obj) -o $@ $(LDFLAGS)
+$(program): $(obj) CalculateXS.o do_flops.o XSbench_header.h
+	$(GCC) $(GCC_S_FLAGS) CalculateXS.o do_flops.o $(obj) -o $@ $(LDFLAGS)
 
 %.o: %.c
-	$(GCC) $(GCC_S_FLAGS) $(GSS_O_FLAGS) -c $< -o $@
+	$(GCC) $(GCC_S_FLAGS) -c $< -o $@
+
+CalculateXS.o: CalculateXS.c
+	$(GCC) $(GCC_S_FLAGS) $(GCC_O_FLAGS) -c CalculateXS.c
 
 do_flops.o: do_flops.c
 	$(GCC) $(GCC_S_FLAGS) -c do_flops.c
 
 clean:
-	rm -rf XSBench XSBench.dSYM $(obj) do_flops.o
+	rm -rf XSBench XSBench.dSYM $(obj) CalculateXS.o do_flops.o
 
 edit:
-	vim -p $(source) do_flops.c papi.c XSbench_header.h
+	vim -p CalculateXS.c $(source) do_flops.c papi.c XSbench_header.h
 run:
 	./XSBench
 bgqrun:
