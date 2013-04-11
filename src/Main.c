@@ -135,7 +135,35 @@ int main( int argc, char* argv[] )
 	int *num_nucs = load_num_nucs(n_isotopes);
 	int **mats = load_mats(num_nucs, n_isotopes);
 	double **concs = load_concs(num_nucs);
+	
+	// =====================================================================
+	// Data Serialization to File Begins
+	// =====================================================================
 
+	border_print();
+	center_print("SERIALIZATION", 79);
+	border_print();
+
+	// nuclide_grids = ======================================================
+
+	// Write
+	// Since we have a 2-D array, I need to manually do writes for each row
+	FILE * ng = fopen( "ng.txt", "w" );
+	
+	for( int i = 0; i < n_nuclides; i++ )
+		fwrite(nuclide_grids, sizeof(NuclideGridPoint), n_isotopes, 
+	
+	fclose(ng);
+	
+
+	// energy_grid
+
+	// mats
+
+	// concs
+
+	// num_nucs
+	
 	// =====================================================================
 	// Cross Section (XS) Parallel Lookup Simulation Begins
 	// =====================================================================
