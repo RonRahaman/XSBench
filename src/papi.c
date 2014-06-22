@@ -4,7 +4,8 @@ void counter_init( int *eventset, int *num_papi_events )
 {
 	char error_str[PAPI_MAX_STR_LEN];
 	//  int events[] = {PAPI_TOT_INS,PAPI_BR_INS,PAPI_SR_INS};
-	int events[] = {PAPI_TOT_INS,PAPI_LD_INS,PAPI_FP_INS};
+	/* int events[] = {PAPI_TOT_INS,PAPI_LD_INS,PAPI_FP_INS}; */
+	int events[] = {PAPI_L3_TCM, PAPI_TLB_DM};
 	int stat;
 
 	int thread = omp_get_thread_num();

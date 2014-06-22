@@ -3,17 +3,29 @@
 // Allocates nuclide matrix
 NuclideGridPoint ** gpmatrix(size_t m, size_t n)
 {
+  /* Continuous */
+	/* int i,j; */
+	/* NuclideGridPoint * full = (NuclideGridPoint *) malloc( m * n * */
+	/*                           sizeof( NuclideGridPoint ) ); */
+	/* NuclideGridPoint ** M = (NuclideGridPoint **) malloc( m * */
+	/*                           sizeof(NuclideGridPoint *) ); */
+
+	/* for( i = 0, j=0; i < m*n; i++ ) */
+	/* 	if( i % n == 0 ) */
+	/* 		M[j++] = &full[i]; */
+
+	/* return M; */
+
+  /* Discontinuous */
 	int i,j;
-	NuclideGridPoint * full = (NuclideGridPoint *) malloc( m * n *
-	                          sizeof( NuclideGridPoint ) );
 	NuclideGridPoint ** M = (NuclideGridPoint **) malloc( m *
 	                          sizeof(NuclideGridPoint *) );
 
-	for( i = 0, j=0; i < m*n; i++ )
-		if( i % n == 0 )
-			M[j++] = &full[i];
+	for( j = 0; j < m; j++ )
+			M[j] = malloc(n * sizeof( NuclideGridPoint ) );
 
 	return M;
+
 }
 
 // Frees nuclide matrix
