@@ -3,13 +3,13 @@
 #===============================================================================
 
 COMPILER    = gnu
-OPTIMIZE    = yes
-DEBUG       = no
+OPTIMIZE    = no
+DEBUG       = yes
 PROFILE     = no
 MPI         = no
 PAPI        = no
 VEC_INFO    = no
-VERIFY      = no
+VERIFY      = yes
 BENCHMARK   = no
 BINARY_DUMP = no
 BINARY_READ = no

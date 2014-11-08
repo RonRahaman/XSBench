@@ -21,6 +21,9 @@
 #define DEBUG 1
 #define SAVE 1
 
+// Initial seed for rn_s()
+#define RN_S_SEED 1337
+
 // Structures
 typedef struct{
 	double energy;
@@ -92,7 +95,7 @@ int * load_num_nucs(long n_isotopes);
 int ** load_mats( int * num_nucs, long n_isotopes );
 double ** load_concs( int * num_nucs );
 double ** load_concs_v( int * num_nucs );
-int pick_mat(unsigned long * seed);
+int pick_mat( double roll );
 double rn(unsigned long * seed);
 int rn_int(unsigned long * seed);
 void counter_stop( int * eventset, int num_papi_events );
@@ -104,6 +107,7 @@ void do_loads( int nuc,
 Inputs read_CLI( int argc, char * argv[] );
 void print_CLI_error(void);
 double rn_v(void);
+float rn_s(const long seed, const long n);
 double round_double( double input );
 unsigned int hash(unsigned char *str, int nbins);
 size_t estimate_mem_usage( Inputs in );

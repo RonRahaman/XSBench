@@ -102,6 +102,44 @@ double rn_v(void)
 	return ret;
 }
 
+// A stateless random number generator, 
+//
+// Produces the n-th element of a sequence that was initially seeded with 'seed'.  
+//
+// This RNG yields a reproducible stream of numbers without a static seed.  On
+// parallel architectures, it may be more convenient than rn_v(). Calls
+// to rn_v() must be protected by critical sections, but calls to rn_s() do not
+// require this protection. 
+//
+// Based on algorithms from Press et al., "Numerical Recipes", second ed.  
+// The bitmasks assume unsigned long ints are 32 bits; and that 32-bit floats
+// follow IEEE representation.  See "Numerical Recipes" for details.  
+float rn_s(const long seed, const long n) 
+{
+  // For pdes
+  unsigned long i,ia,ib,iswap,itmph=0,itmpl=0; 
+  const unsigned long c1[4]={ 0xbaa96887L, 0x1e17d32cL, 0x03bcdc3cL, 0x0f33d1b2L}; 
+  const unsigned long c2[4]={ 0x4b0f3b58L, 0xe874f0c3L, 0x6955c5a6L, 0x55a7ca46L};
+  // For ran4
+  unsigned long irword,itemp,lword;
+  const unsigned long jflone = 0x3f800000; 
+  const unsigned long jflmsk = 0x007fffff;
+  irword = n;
+  lword = seed;
+  // Run pdes
+  for (i=0; i<4; i++) {
+    ia = (iswap = irword) ^ c1[i];
+    itmpl = ia & 0xffff;
+    itmph = ia >> 16;
+    ib = itmpl*itmpl+ ~(itmph*itmph); 
+    irword = lword ^ (((ia = (ib >> 16) |
+            ((ib & 0xffff) << 16)) ^ c2[i])+itmpl*itmph); 
+    lword = iswap;
+  }
+  itemp=jflone | (jflmsk & irword); 
+  return (*(float *)&itemp)-1.0;
+}
+
 unsigned int hash(unsigned char *str, int nbins)
 {
 	unsigned int hash = 5381;
