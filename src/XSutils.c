@@ -102,6 +102,14 @@ double rn_v(void)
 	return ret;
 }
 
+double *load_rands(int lookups) {
+  double *rands = malloc(2 * lookups * sizeof(double));
+  int i;
+  for (i=1; i<2*lookups; i++)
+    rands[i] = rn_v();
+  return rands;
+}
+
 unsigned int hash(unsigned char *str, int nbins)
 {
 	unsigned int hash = 5381;
