@@ -1,4 +1,20 @@
 ==============================================================================
+Branch Notes (rng_stream)
+==============================================================================
+
+In verification mode, this version creates a reproducible array of random
+numbers (using calls to rn_v()).  In the parallel lookup block, random numbers
+are read from the array.  This obviates the critical sections, since rn_v() is
+not called in the parallel block.  
+
+The random-number arrays are populated such that the verification hashes match
+the hashes produced by the master version.  
+
+This feature was developed for possible use in OCCA-XSBench, OpenACC-XSBench,
+etc.  Removing the critical sections makes development much easier on
+accelerators.  
+
+==============================================================================
                    __   __ ___________                 _                        
                    \ \ / //  ___| ___ \               | |                       
                     \ V / \ `--.| |_/ / ___ _ __   ___| |__                     

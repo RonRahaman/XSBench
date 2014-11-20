@@ -90,6 +90,7 @@ long grid_search( long n, double quarry, GridPoint * A);
 
 int * load_num_nucs(long n_isotopes);
 int ** load_mats( int * num_nucs, long n_isotopes );
+double *load_rands(int lookups);
 double ** load_concs( int * num_nucs );
 double ** load_concs_v( int * num_nucs );
 int pick_mat(double roll);

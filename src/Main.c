@@ -103,7 +103,9 @@ int main( int argc, char* argv[] )
 #endif
 
 #ifdef VERIFICATION
-  /* double *rands = load_rands(in.lookups) */
+  // Loads a stream of random numbers for parallel block.
+  // This allows reproducible results without critical sections.
+  double *rands = load_rands(in.lookups);
 #endif
 
 #ifdef BINARY_DUMP
@@ -147,7 +149,7 @@ int main( int argc, char* argv[] )
 #pragma omp parallel default(none) \
     private(i, thread, p_energy, mat, seed) \
     shared( max_procs, in, energy_grid, nuclide_grids, \
-        mats, concs, num_nucs, mype, vhash) 
+        mats, concs, num_nucs, mype, vhash, rands)
     {	
       // Initialize parallel PAPI counters
 #ifdef PAPI
@@ -177,11 +179,8 @@ int main( int argc, char* argv[] )
 
         // Randomly pick an energy and material for the particle
 #ifdef VERIFICATION
-#pragma omp critical
-        {
-          p_energy = rn_v();
-          mat      = pick_mat(rn_v()); 
-        }
+        p_energy = rands[2*i];
+        mat      = pick_mat(rands[2*i+1]); 
 #else
         p_energy = rn(&seed);
         mat      = pick_mat(rn(&seed)); 
