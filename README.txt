@@ -1,4 +1,23 @@
 ==============================================================================
+Branch Notes (stateless_rng)
+==============================================================================
+
+In verification mode, this version replaces rn_v() with a statelss rng (called
+rn_s()) to yield a reproducible stream of random numbers.  The stateless rng
+does not rely on a static seed, so it obviates the critical sections in the
+parallel lookup loop.
+
+The stateless RNG yields repoducible checksums.  Unfortunately, the stateless
+rng produces checksums that DO NOT match the checksums produced by the master
+version.  To our knowledge, this is not because the the RNG works incorrectly;
+the stateless rng simply produces a different stream of random numbers because
+it uses a different algorithm than rn_v().  
+
+This feature was developed for possible use in OCCA-XSBench, OpenACC-XSBench,
+etc.  Removing the critical sections makes development much easier on
+accelerators.  
+
+==============================================================================
                    __   __ ___________                 _                        
                    \ \ / //  ___| ___ \               | |                       
                     \ V / \ `--.| |_/ / ___ _ __   ___| |__                     
