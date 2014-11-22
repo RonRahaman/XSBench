@@ -173,9 +173,8 @@ int main( int argc, char* argv[] )
             macro_xs_vector );
 
         // Accumulate sum for random variable
-        rv_sum += mat/10. + p_energy;
-        for (i=0; i < 5; i++)
-          rv_sum += macro_xs_vector[i];
+        rv_sum += (mat + p_energy + macro_xs_vector[0] + macro_xs_vector[1]
+            + macro_xs_vector[2] + macro_xs_vector[3] + macro_xs_vector[4]);
 
       }
 
