@@ -36,8 +36,7 @@ void center_print(const char *s, int width)
 	fputs("\n", stdout);
 }
 
-void print_results( Inputs in, int mype, double runtime, int nprocs,
-	unsigned long long vhash )
+void print_results( Inputs in, int mype, double runtime, int nprocs, double avg)
 {
 	// Calculate Lookups per sec
 	int lookups_per_sec = (int) ((double) in.lookups / runtime);
@@ -73,9 +72,7 @@ void print_results( Inputs in, int mype, double runtime, int nprocs,
 		printf("Lookups/s:   ");
 		fancy_int(lookups_per_sec);
 		#endif
-		#ifdef VERIFICATION
-		printf("Verification checksum: %llu\n", vhash);
-		#endif
+		printf("Estimated E(X): %0.5lf\n", avg);
 		border_print();
 
 		// For bechmarking, output lookup/s data to file
