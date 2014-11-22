@@ -16,6 +16,7 @@ int main( int argc, char* argv[] )
   unsigned long seed;
   double omp_start, omp_end, p_energy;
   unsigned long long vhash = 0;
+  double vsum = 0.;
   int nprocs;
 
 #ifdef MPI
@@ -149,7 +150,8 @@ int main( int argc, char* argv[] )
 #pragma omp parallel default(none) \
     private(i, thread, p_energy, mat, seed) \
     shared( max_procs, in, energy_grid, nuclide_grids, \
-        mats, concs, num_nucs, mype, vhash, rands)
+        mats, concs, num_nucs, mype, vhash, rands) \
+    reduction(+:vsum)
     {	
       // Initialize parallel PAPI counters
 #ifdef PAPI
@@ -201,6 +203,8 @@ int main( int argc, char* argv[] )
         // This method provides a consistent hash accross
         // architectures and compilers.
 #ifdef VERIFICATION
+        vsum += (p_energy + mat + macro_xs_vector[0] + macro_xs_vector[1] +
+            macro_xs_vector[2] + macro_xs_vector[3] + macro_xs_vector[4]);
         char line[256];
         sprintf(line, "%.5lf %d %.5lf %.5lf %.5lf %.5lf %.5lf",
             p_energy, mat,
@@ -244,7 +248,7 @@ int main( int argc, char* argv[] )
     omp_end = omp_get_wtime();
 
     // Print / Save Results and Exit
-    print_results( in, mype, omp_end-omp_start, nprocs, vhash );
+    print_results( in, mype, omp_end-omp_start, nprocs, vhash, vsum );
 
 #ifdef BENCHMARK
   }

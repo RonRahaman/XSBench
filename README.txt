@@ -2,6 +2,8 @@
 Branch Notes (rng_stream)
 ==============================================================================
 
+RNG Stream--------------------------------------------------------------------
+
 In verification mode, this version creates a reproducible array of random
 numbers (using calls to rn_v()).  In the parallel lookup block, random numbers
 are read from the array.  This obviates the critical sections, since rn_v() is
@@ -13,6 +15,21 @@ the checksums produced by the master version.
 This feature was developed for possible use in OCCA-XSBench, OpenACC-XSBench,
 etc.  Removing the critical sections makes development much easier on
 accelerators.  
+
+Verification Average----------------------------------------------------------
+
+This version also accumaltes a verifcation average, which is simply the average
+sum of material, energy, and macro xs values.  The intent behind this was to
+avoid the use of the hashing function in the checksum. The hash uses sprintf,
+but sprintf is not implemented on all accellerators.  
+
+Below are the expected averages for default runs of each size (-s):
+
+small : 23.62963
+large : 74.06830
+
+Note these values are inexact, since floating-point addition is not
+associative.  
 
 ==============================================================================
                    __   __ ___________                 _                        
