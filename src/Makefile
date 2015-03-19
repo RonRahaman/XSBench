@@ -13,6 +13,7 @@ VERIFY      = no
 BENCHMARK   = no
 BINARY_DUMP = no
 BINARY_READ = no
+FIRST_TOUCH = yes
 
 #===============================================================================
 # Program name & source code list
@@ -35,7 +36,7 @@ obj = $(source:.c=.o)
 #===============================================================================
 
 # Standard Flags
-CFLAGS := -std=gnu99
+CFLAGS := -std=gnu99 -Wall
 
 # Linker Flags
 LDFLAGS = -lm
@@ -116,6 +117,10 @@ ifeq ($(BINARY_READ),yes)
   CFLAGS += -DBINARY_READ
 endif
 
+# First-touch memory initialization optimization
+ifeq ($(FIRST_TOUCH),yes)
+  CFLAGS += -DFIRST_TOUCH
+endif
 
 #===============================================================================
 # Targets to Build
