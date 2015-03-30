@@ -60,17 +60,22 @@ occaFunction long grid_search_kernel( const long int n,
                                       const GridPoint * const restrict A) {
   long int lowerLimit = 0;
   long int upperLimit = n-1;
+	int examinationPoint;
+  int length = upperLimit - lowerLimit;
 
-  for(long int length = (upperLimit - lowerLimit); 1 < length; length /= 2){
-    const long int examinationPoint = lowerLimit + ( length / 2 );
+	while (length > 1) {
+		examinationPoint = lowerLimit + (length/2);
 
-    if( A[examinationPoint].energy > quarry )
-      upperLimit = examinationPoint;
-    else
-      lowerLimit = examinationPoint;
-  }
+		double x = __ldg(&A[examinationPoint].energy);
 
-  return lowerLimit;
+		if (x > quarry)
+			upperLimit = examinationPoint;
+		else
+			lowerLimit = examinationPoint;
+
+		length = upperLimit - lowerLimit;
+	}
+	return lowerLimit;
 }
 
 occaFunction int pick_mat( unsigned long int * seed ) {
