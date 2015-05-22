@@ -2,13 +2,15 @@
 # User Options
 #===============================================================================
 
-COMPILER    = gnu
+COMPILER    = intel
 OPTIMIZE    = yes
+NO_VEC      = no
 DEBUG       = no
+ASM         = yes
 PROFILE     = no
 MPI         = no
 PAPI        = no
-VEC_INFO    = no
+VEC_INFO    = yes
 VERIFY      = no
 BENCHMARK   = no
 BINARY_DUMP = no
@@ -76,8 +78,29 @@ endif
 
 # Compiler Vectorization (needs -O3 flag) information
 ifeq ($(VEC_INFO),yes)
-  CFLAGS += -ftree-vectorizer-verbose=6
+  ifeq ($(COMPILER),gnu)
+    CFLAGS += -ftree-vectorizer-verbose=6
+  endif
+  ifeq ($(COMPILER),intel)
+    CFLAGS += -vec-report=3
+    #CFLAGS += -qopt-report -qopt-report-phase:vec
+  endif
 endif
+
+# Turn off vectorizaiton for debugging
+ifeq ($(NO_VEC),yes)
+  ifeq ($(COMPILER),intel)
+    CFLAGS += -no-vec -no-simd
+  endif
+endif
+
+# Create annoted assembly
+ifeq ($(ASM),yes)
+  ifeq ($(COMPILER),intel)
+    CFLAGS += -S -fcode-asm
+  endif
+endif
+
 
 # PAPI source (you may need to provide -I and -L pointing
 # to PAPI depending on your installation
